@@ -13,7 +13,7 @@ router.get('/', (req, res, next) => {
     });
 });
 
-module.exports = router;
+
 
 
 // add
@@ -96,6 +96,7 @@ router.post('/delete', (req, res, next) => {
 
 
 router.get('/login', (req, res, next) => {
+    console.log('login page is opened')
     var data = {
         title: 'Users/Login',
         content: '名前とパスワードを入力下さい。'
@@ -104,12 +105,18 @@ router.get('/login', (req, res, next) => {
 });
 
 router.post('/login', (req, res, next) => {
+    const name = req.body.name
+    const pass = req.body.pass
+        /////////////////////////////////////////////////////////////////////////
+    console.log(name, pass)
     db.User.findOne({
         where: {
-            name: req.body.name,
-            pass: req.body.pass,
+            name,
+            pass,
         }
     }).then(usr => {
+        /////////////////////////////////////////////////////////////////////////
+        console.log(usr)
         if (usr != null) {
             req.session.login = usr;
             let back = req.session.back;
@@ -118,6 +125,7 @@ router.post('/login', (req, res, next) => {
             }
             res.redirect(back);
         } else {
+            console.log('no user')
             var data = {
                 title: 'Users/Login',
                 content: '名前かパスワードに問題があります。再度入力下さい。'
